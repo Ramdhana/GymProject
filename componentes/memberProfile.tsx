@@ -19,7 +19,7 @@ export default function MemberProfile() {
   const [clientData, setClientData] = useState({ searchtype: '', searchvalue: '' });
   const [state, setState] = useState([]);
 
-  const fetchData = async (e) => {
+  const fetchData = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     const database = firebase.database();
     const ref = database.ref('Members');
@@ -28,13 +28,13 @@ export default function MemberProfile() {
     if (clientData.searchtype && clientData.searchvalue) {
       switch (clientData.searchtype) {
         case 'UI':
-          query = query.orderByChild('userId').equalTo(clientData.searchvalue);
+          query.orderByChild('userId').equalTo(clientData.searchvalue);
           break;
         case 'MN':
-          query = query.orderByChild('mobileNumber').equalTo(clientData.searchvalue);
+          query.orderByChild('mobileNumber').equalTo(clientData.searchvalue);
           break;
         case 'UN':
-          query = query.orderByChild('userName').equalTo(clientData.searchvalue);
+         query.orderByChild('userName').equalTo(clientData.searchvalue);
           break;
         default:
           break;
@@ -44,7 +44,7 @@ export default function MemberProfile() {
     query.on('value', (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        const dataArray = Object.values(data);
+        const dataArray:any = Object.values(data);
         setState(dataArray);
       }
     });
@@ -97,94 +97,53 @@ export default function MemberProfile() {
           </div>
         </div>
 
-        {state.length > 0 && (
-          <div className="flex flex-wrap -mx-3 mb-4">
-            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    Id
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Name
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Address
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Email
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Gender
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Mobile Number
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Joining Date
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Package Days
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Package Start
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Package End
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Package Type
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Type
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {state.map((item, index) => (
-                  <tr key={index} className={`${index % 2 === 0 ? 'bg-gray-50 dark:bg-gray-800' : 'bg-white dark:bg-gray-900'} border-b dark:border-gray-700`}>
-                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {item.Id}
-                    </td>
-                    <td className="px-6 py-4">
-                      {item.name}
-                    </td>
-                    <td className="px-6 py-4">
-                      {item.address}
-                    </td>
-                    <td className="px-6 py-4">
-                      {item.email}
-                    </td>
-                    <td className="px-6 py-4">
-                      {item.gender}
-                    </td>
-                    <td className="px-6 py-4">
-                      {item.mobilenumber}
-                    </td>
-                    <td className="px-6 py-4">
-                      {item.joiningdate}
-                    </td>
-                    <td className="px-6 py-4">
-                      {item.packagedays}
-                    </td>
-                    <td className="px-6 py-4">
-                      {item.packagestart}
-                    </td>
-                    <td className="px-6 py-4">
-                      {item.packageend}
-                    </td>
-                    <td className="px-6 py-4">
-                      {item.packagetype}
-                    </td>
-                    <td className="px-6 py-4">
-                      {item.type}
-                    </td>
+        <div className="px-3 -mx-3 mb-4">
+          {state.length > 0 && (
+            <div className="overflow-x-auto">
+              <table className="w-full table-auto">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                  <th className="px-6 py-3">Action</th>
+                    <th className="px-6 py-3">Member Id</th>
+                    <th className="px-6 py-3">Member Name</th>
+                    <th className="px-6 py-3">Joining Date</th>
+                    <th className="px-6 py-3">Member Type</th>
+                    <th className="px-6 py-3">Package Type</th>
+                    <th className="px-6 py-3">Package Days</th>
+                    <th className="px-6 py-3">Package Start</th>
+                    <th className="px-6 py-3">Package End</th>
+                    <th className="px-6 py-3">Gender</th>
+                    <th className="px-6 py-3">Address</th>
+                    <th className="px-6 py-3">Email</th>
+                    <th className="px-6 py-3">Mobile Number</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                </thead>
+                <tbody className="text-sm text-gray-600 dark:text-gray-300">
+                  {state.map((item: any, index: number) => (
+                    <tr
+                      key={index}
+                      className={`${index % 2 === 0 ? 'bg-gray-100 dark:bg-gray-800' : 'bg-white dark:bg-gray-900'}`}
+                    >
+                      <td className="px-6 py-4">Edit</td>
+                      <td className="px-6 py-4">{item.Id}</td>
+                      <td className="px-6 py-4">{item.name}</td>
+                      <td className="px-6 py-4">{item.joiningdate}</td>
+                      <td className="px-6 py-4">{item.type}</td>
+                      <td className="px-6 py-4">{item.packagetype}</td>
+                      <td className="px-6 py-4">{item.packagedays}</td>
+                      <td className="px-6 py-4">{item.packagestart}</td>
+                      <td className="px-6 py-4">{item.packageend}</td>
+                      <td className="px-6 py-4">{item.gender}</td>
+                      <td className="px-6 py-4">{item.address}</td>
+                      <td className="px-6 py-4">{item.email}</td>
+                      <td className="px-6 py-4">{item.mobilenumber}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

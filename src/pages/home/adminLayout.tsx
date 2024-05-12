@@ -71,11 +71,11 @@ export default function Layout() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 p-10">
+      <div className="flex-1 p-10 overflow-hidden">
         <header className="bg-white shadow p-4 flex-row">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">{headerText}</h1>
         </header>
-        <main className="mt-8 p-4 bg-white shadow">{renderSubmenuContent()}</main>
+        <main className="mt-8 p-4 bg-white shadow overflow-scroll">{renderSubmenuContent()}</main>
       </div>
     </div>
   );

@@ -34,51 +34,48 @@ export default function memberCreation() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e: {
-    target: {
-      [x: string]: string;
-      files: any; name: any; value: any;
-    };
-  }) => {
-
-    debugger;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name } = e.target;
     const { value } = e.target;
-    const { files } = e.target;
-    if (name === 'image1' && files) {
-      const file = files[0];
-      const reader = new FileReader();
+    //const { files } = e.target;
+    // if (name === 'image1' && files) {
+    //   const file = files[0];
+    //   const reader = new FileReader();
 
-      reader.onload = (r) => {
-        try {
-          const base64String = r.target?.result?.toString().split(',')[1];
-          if (base64String) {
-            clientData.image = base64String;
-          } else {
-            console.error('Failed to extract Base64 string from data URL.');
-          }
-        } catch (error) {
-          console.error('Error processing Base64 string:', error);
-        }
-      };
+    //   reader.onload = (r) => {
+    //     try {
+    //       const base64String = r.target?.result?.toString().split(',')[1];
+    //       if (base64String) {
+    //         clientData.image = base64String;
+    //       } else {
+    //         console.error('Failed to extract Base64 string from data URL.');
+    //       }
+    //     } catch (error) {
+    //       console.error('Error processing Base64 string:', error);
+    //     }
+    //   };
 
-      reader.readAsDataURL(file);
-    }
-    else {
+    //   reader.readAsDataURL(file);
+    // }
+    // else {
 
-      setClientData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    }
-
-
+    //   setClientData((prevData) => ({
+    //     ...prevData,
+    //     [name]: value,
+    //   }));
+    // }
+    setClientData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  
     // Calculate package end date when package type changes
     if ((name === 'packagetype' || name === 'packagestart' || name === 'packagedays')) {
       debugger
       if ((name === 'packagetype')) {
-        const selectedOption = e.target.selectedOptions[0];
-        const selectedLabel = selectedOption ? selectedOption.label : '';
+        const target:any = e.target;
+        const selectedOption:any = target.selectedOptions;
+        const selectedLabel = selectedOption[0].label;
         clientData.packagetype = selectedLabel;
       }
       if ((name === 'packagetype' || name === 'packagedays')) {
@@ -122,14 +119,15 @@ export default function memberCreation() {
       ref.once('value', async (snapshot) => {
         const data = snapshot.val();
         if (data) {
-          const filteredData = Object.values(data);
+          const filteredData:any = Object.values(data);
           debugger;
           if (filteredData.length > 0) {
-            const lastId = filteredData[filteredData.length - 1].Id;
-            const Id = parseInt(lastId, 10) + 1;
+            let count = filteredData.length - 1;
+          let lastId: string = filteredData[count].Id;
+            let Id = parseInt(lastId, 10) + 1;
             const paddedId = Id.toString().padStart(4, '0');
             clientData.Id = paddedId;
-            const filteredData1 = Object.values(data).filter(item => item.Id === Id);
+            const filteredData1 = Object.values(data).filter( (item:any )=> item.Id   === Id);
             if (filteredData1.length > 0) {
               alert('Unable to create. Please try again later.(E)');
               setIsSubmitting(false);
