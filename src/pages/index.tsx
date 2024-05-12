@@ -40,7 +40,7 @@ export default function Login() {
     query.once('value', (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        const filteredData = Object.values(data).filter(item => item.Pass === clientData.Pass);
+        const filteredData = Object.values(data).filter((item:any) => item.Pass === clientData.Pass);
         if (filteredData.length > 0) {
           alert("Login successfully");
           router.push("/home/adminLayout");
